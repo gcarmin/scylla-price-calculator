@@ -9,7 +9,7 @@ All prices are calculated for US regions only (us-east-1 in the case of AWS). Pr
 ### Model assumptions
 - In CQL mode, each vCPU gives ~ 15000 reads, 15000 writes peak; pre compactions, repairs etc
 - Each operation will use _replication factor_ vCPUs (assumes consistency level ALL for reads)
-- Performance degradation due to large item size: > 10kb perf *= 0.75, > 100kb 0.5, > 1MB 0.25
+- Performance degradation due to large item size: `a / (itemSize + b)`. The exact values of the constants `a` and `b` can be found in the code - they have been determined experimentaly using a series of benchmarks and model regression. 
 - Performance degredation due to compactions: writes * 0.5, reads * 0.8
 - Compaction overhead ~ 1.4x ([ICS](https://docs.scylladb.com/architecture/compaction/compaction-strategies/#incremental-compaction-strategy-ics))
 - RAM to disk ratio 1:32

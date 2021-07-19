@@ -222,16 +222,14 @@ function clusterResources(cluster: ClusterSpec): ResourceSpec {
     }
 }
 
+
+/*
+The following is experimental result, function is based on model regressions done on a series of benchmark results. itemSize in kb.
+*/
 function itemSizePerfFactor(itemSize: number): number {
-    if (itemSize <= 10) {
-        return 1
-    } else if (itemSize < 100) {
-        return 0.75
-    } else if (itemSize < 1000) {
-        return 0.5
-    } else {
-        return 0.25
-    }
+    const a = 4.81
+    const b = 3.764
+    return a / (itemSize + b)
 }
 
 /* Cluster size recommendations based on the optimization target:
