@@ -256,7 +256,7 @@ export function selectClusterInstances(
 ): ClusterSpec | undefined {
     const diskSpace = workload.storage * CompactionOverhead
     const recommendedResources: ResourceSpec = {
-        vcpu: (workload.reads / perf.reads + workload.writes / perf.writes) / itemSizePerfFactor(workload.itemSize),
+        vcpu: (workload.reads / perf.reads / 0.8 + workload.writes / perf.writes / 0.5) / itemSizePerfFactor(workload.itemSize),
         storage: diskSpace,
         memory: Math.ceil(workload.storage / RAMtoDataRatio)
     }

@@ -99,6 +99,12 @@
                   <b>op/sec</b>
                 </td>
               </tr>
+              <tr v-tooltip="'Total read and write combined throughput, sustained during long term operation'">
+                <td>Sustained throughput</td>
+                <td>
+                  <strong>{{clusterCapacity.sustainedLoad.toLocaleString()}}</strong>
+                </td>
+              </tr>
             </tbody>
           </table>
           <h3>Cluster specs</h3>
