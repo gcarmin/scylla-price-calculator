@@ -1,15 +1,13 @@
 <template>
   <div class="pricing" id="keyspaces">
-    <template v-for="price in prices" :key="price.id">
-      <div>
-        <div class="price-name text-capitalize">{{ price.name }}</div>
-        <div class="price__wrapper">
-          <div class="price d-flex align-items-baseline">
-            <small>$</small>{{formatPrice(price.total)}}
-          </div>
+    <div v-for="price in prices" :key="price.id">
+      <div class="price-name text-capitalize">{{ price.name }}</div>
+      <div class="price__wrapper">
+        <div class="price d-flex align-items-baseline">
+          <small>$</small>{{formatPrice(price.total)}}
         </div>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 

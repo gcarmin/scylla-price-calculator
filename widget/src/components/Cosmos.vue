@@ -1,21 +1,19 @@
 <template>
   <div class="pricing" id="cosmos">
-    <template v-for="price in prices" :key="price.id">
-      <div>
-        <div class="price-name text-capitalize">{{ price.name }}</div>
-        <div class="price__wrapper">
-          <div class="price d-flex align-items-baseline">
-            <small>$</small>{{formatPrice(price.total)}}
-          </div>
+    <div v-for="price in prices" :key="price.id">
+      <div class="price-name text-capitalize">{{ price.name }}</div>
+      <div class="price__wrapper">
+        <div class="price d-flex align-items-baseline">
+          <small>$</small>{{formatPrice(price.total)}}
         </div>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import {Cosmos} from '../Calculator'
+import {Cosmos} from 'scylla-price-calculator-lib'
 import {CalcCommons} from '../CalcMixin'
 
 export default {

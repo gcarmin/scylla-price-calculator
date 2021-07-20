@@ -1,16 +1,14 @@
 <template>
   <div class="pricing" id="datastax-astra">
     <template v-if="true">
-      <template v-for="price in prices" :key="price.id">
-        <div>
-          <div class="price-name text-capitalize">{{ price.name }}</div>
-          <div class="price__wrapper">
-            <div class="price d-flex align-items-baseline">
-              <small>$</small>{{formatPrice(price.total)}}
-            </div>
+      <div v-for="price in prices" :key="price.id">
+        <div class="price-name text-capitalize">{{ price.name }}</div>
+        <div class="price__wrapper">
+          <div class="price d-flex align-items-baseline">
+            <small>$</small>{{formatPrice(price.total)}}
           </div>
         </div>
-      </template>
+      </div>
       <div v-if="!hideSpecs" class="card">
         <div class="card-header">
           <button

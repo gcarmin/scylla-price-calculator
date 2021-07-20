@@ -1,20 +1,18 @@
 <template>
   <div class="pricing" id="dynamodb">
-    <template v-for="price in prices" :key="price.id">
-      <div>
-        <div class="price-name text-capitalize">
-          {{ price.name }}
-          <div class="font-weight-light d-inline-block">
-            {{ price.subname }}
-          </div>
-        </div>
-        <div class="price__wrapper">
-          <div class="price d-flex align-items-baseline">
-            <small>$</small>{{formatPrice(price.total)}}
-          </div>
+    <div v-for="price in prices" :key="price.id">
+      <div class="price-name text-capitalize">
+        {{ price.name }}
+        <div class="font-weight-light d-inline-block">
+          {{ price.subname }}
         </div>
       </div>
-    </template>
+      <div class="price__wrapper">
+        <div class="price d-flex align-items-baseline">
+          <small>$</small>{{formatPrice(price.total)}}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
