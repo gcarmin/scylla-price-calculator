@@ -6,12 +6,7 @@
           <div class="price-name text-capitalize">{{ price.name }}</div>
           <div class="price__wrapper">
             <div class="price d-flex align-items-baseline">
-              <small>$</small
-              >{{
-                price.total.toLocaleString(undefined, {
-                  maximumFractionDigits: 2
-                })
-              }}
+              <small>$</small>{{formatPrice(price.total)}}
             </div>
           </div>
         </div>
@@ -47,8 +42,10 @@
 <script lang="ts">
 import { defineComponent, DefineComponent} from 'vue'
 import {Astra} from 'scylla-price-calculator-lib'
+import {CalcCommons} from '../CalcMixin'
 
 export default defineComponent({
+  mixins: [CalcCommons],
   data() {
     return {}
   },

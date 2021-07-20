@@ -5,12 +5,7 @@
         <div class="price-name text-capitalize">{{ price.name }}</div>
         <div class="price__wrapper">
           <div class="price d-flex align-items-baseline">
-            <small>$</small
-            >{{
-              price.total.toLocaleString(undefined, {
-                maximumFractionDigits: 2
-              })
-            }}
+            <small>$</small>{{formatPrice(price.total)}}
           </div>
         </div>
       </div>
@@ -21,8 +16,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import {Cosmos} from '../Calculator'
+import {CalcCommons} from '../CalcMixin'
 
 export default {
+  mixins: [CalcCommons],
   props: ['workload'],
   computed: {
     prices: (vm: Vue.DefineComponent) => {

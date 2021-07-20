@@ -156,6 +156,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import {ScyllaCloud} from 'scylla-price-calculator-lib'
+import {CalcCommons} from '../CalcMixin'
 
 const modes: Record<string, ScyllaCloud.MODE> = {
   CQL: ScyllaCloud.MODE.CQL,
@@ -170,6 +171,7 @@ const data = {
 }
 
 export default {
+  mixins: [CalcCommons],
   data() {
     return data
   },
@@ -184,11 +186,6 @@ export default {
     hideSpecs: {
       type: Boolean,
       default: false
-    }
-  },
-  methods: {
-    formatPrice(price: number): string {
-      return price > 1000 ? price.toLocaleString(undefined, {maximumFractionDigits: 0}) : price.toLocaleString(undefined, {maximumFractionDigits: 2})
     }
   },
   computed: {
