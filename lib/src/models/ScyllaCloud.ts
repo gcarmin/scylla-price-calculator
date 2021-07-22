@@ -63,11 +63,85 @@ interface InstanceTypeSpec extends ResourceSpec {
     readonly computePrice: NodePricing
 }
 
+type Cloud = 'aws' | 'gcp'
+
 type InstanceTypesSpec = {
-    [cloud: string]: InstanceTypeSpec[]
+    [cloud in Cloud]: InstanceTypeSpec[]
 }
 
 const instanceTypes: InstanceTypesSpec = {
+    gcp: [
+        {
+            name: 'n2-highmem-2',
+            vcpu: 2,
+            memory: 16,
+            storage: 375,
+            computePrice: {
+                ondemand: 159.39,
+                reserved: 124
+            }
+        },
+        {
+            name: 'n2-highmem-4',
+            vcpu: 4,
+            memory: 32,
+            storage: 750,
+            computePrice: {
+                ondemand: 318.78,
+                reserved: 248
+            }
+        },
+        {
+            name: 'n2-highmem-8',
+            vcpu: 8,
+            memory: 64,
+            storage: 1500,
+            computePrice: {
+                ondemand: 637.56,
+                reserved: 496
+            }
+        },
+        {
+            name: 'n2-highmem-16',
+            vcpu: 16,
+            memory: 128,
+            storage: 3000,
+            computePrice: {
+                ondemand: 1275.12,
+                reserved: 992
+            }
+        },
+        {
+            name: 'n2-highmem-32',
+            vcpu: 32,
+            memory: 256,
+            storage: 7500,
+            computePrice: {
+                ondemand: 2805.24,
+                reserved: 2238.99
+            }
+        },
+        {
+            name: 'n2-highmem-48',
+            vcpu: 64,
+            memory: 384,
+            storage: 9000,
+            computePrice: {
+                ondemand: 3825.37,
+                reserved: 2976
+            }
+        },
+        {
+            name: 'n2-highmem-64',
+            vcpu: 64,
+            memory: 512,
+            storage: 9000,
+            computePrice: {
+                ondemand: 4590.49,
+                reserved: 3458
+            }
+        }
+    ],
     aws: [
         {
             name: 'i3.large',
@@ -237,8 +311,8 @@ function itemSizePerfFactor(itemSize: number): number {
 - storage - select nodes with enough cpu and max storage
 - cost - select nodes with just enough cpu and storage, even if smaller nodes
 */
-function selectClusterConfigs(specs: ResourceSpec): ClusterSpec[] {
-    return instanceTypes.aws.map(instanceType => {
+function selectClusterConfigs(specs: ResourceSpec, cloud: Cloud): ClusterSpec[] {
+    return instanceTypes[cloud].map(instanceType => {
         const nodes = _.find(_.range(1, 300), n => (
             instanceType.vcpu * n >= specs.vcpu &&
             instanceType.memory * n >= specs.memory &&
@@ -252,6 +326,7 @@ function selectClusterConfigs(specs: ResourceSpec): ClusterSpec[] {
 export function selectClusterInstances(
     workload: WorkloadSpec,
     replicationFactor: number,
+    cloud: Cloud,
     perf: PerfModeData,
 ): ClusterSpec | undefined {
     const diskSpace = workload.storage * CompactionOverhead
@@ -266,8 +341,8 @@ export function selectClusterInstances(
         memory: Math.ceil(diskSpace / RAMtoDiskRatio)
     }
     
-    const recommendedConfigs = selectClusterConfigs(recommendedResources)
-    const minimalConfigs = selectClusterConfigs(minimalResources)
+    const recommendedConfigs = selectClusterConfigs(recommendedResources, cloud)
+    const minimalConfigs = selectClusterConfigs(minimalResources, cloud)
     
     const lowestPrice = _.chain(minimalConfigs)
     .map(ondemandPrice)
@@ -300,7 +375,7 @@ export function clusterCapacity(cluster: ClusterSpec, replicationFactor: number,
     return { sustainedLoad, peakLoad, dataset, ...totalResources }
 }
 
-export function prices(workload: WorkloadSpec, replicationFactor: number, perfMode: MODE = MODE.CQL) {
+export function prices(workload: WorkloadSpec, replicationFactor: number, cloud: Cloud = 'aws', perfMode: MODE = MODE.CQL) {
     const perf = vcpuPerf[perfMode]
     // currently, Scylla requires each replica to be in a different AZ
     const replicationTraffic =
@@ -310,7 +385,7 @@ export function prices(workload: WorkloadSpec, replicationFactor: number, perfMo
     1e6 * DataThroughputAvgFactor
     const dataTransfer = replicationTraffic * AWSDataTransferPrice
     
-    const cluster = selectClusterInstances(workload, replicationFactor, perf)!
+    const cluster = selectClusterInstances(workload, replicationFactor, cloud, perf)!
     
     const prices = [
         {

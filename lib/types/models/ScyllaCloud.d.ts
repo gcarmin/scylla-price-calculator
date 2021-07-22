@@ -26,7 +26,8 @@ interface InstanceTypeSpec extends ResourceSpec {
     readonly name: string;
     readonly computePrice: NodePricing;
 }
-export declare function selectClusterInstances(workload: WorkloadSpec, replicationFactor: number, perf: PerfModeData): ClusterSpec | undefined;
+declare type Cloud = 'aws' | 'gcp';
+export declare function selectClusterInstances(workload: WorkloadSpec, replicationFactor: number, cloud: Cloud, perf: PerfModeData): ClusterSpec | undefined;
 export declare function clusterCapacity(cluster: ClusterSpec, replicationFactor: number, perfMode?: MODE): {
     vcpu: number;
     memory: number;
@@ -35,7 +36,7 @@ export declare function clusterCapacity(cluster: ClusterSpec, replicationFactor:
     peakLoad: number;
     dataset: number;
 };
-export declare function prices(workload: WorkloadSpec, replicationFactor: number, perfMode?: MODE): {
+export declare function prices(workload: WorkloadSpec, replicationFactor: number, cloud?: Cloud, perfMode?: MODE): {
     prices: {
         dataTransfer: number;
         total: number;
