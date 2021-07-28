@@ -157,6 +157,7 @@
 import Vue from 'vue'
 import {ScyllaCloud} from 'scylla-price-calculator-lib'
 import {CalcCommons} from '../CalcMixin'
+import Toggle from './Toggle.vue'
 
 const modes: Record<string, ScyllaCloud.MODE> = {
   CQL: ScyllaCloud.MODE.CQL,
@@ -179,6 +180,10 @@ export default {
     workload: {
       type: Object
     },
+    cloud: {
+      type: String,
+      enum: ['aws', 'gcp']
+    },
     pricing: {
       type: String,
       enum: ['reserved', 'ondemand']
@@ -194,7 +199,7 @@ export default {
       return vm.prices.filter((p: any) => p.id === vm.pricing)
     },
     clusterSpecs(vm: Vue.DefineComponent) {
-      return ScyllaCloud.prices(vm.workload, vm.replicationFactor)
+      return ScyllaCloud.prices(vm.workload, vm.replicationFactor, vm.cloud)
     },
     cluster(vm: Vue.DefineComponent) {
       return vm.clusterSpecs.cluster

@@ -24,16 +24,16 @@
         <div class="right-column__header d-flex">
           <div
             v-show="selectedDropdownItem.name === 'details'"
-            class="billing-toggle-wrapper align-items-center"
+            class="cloud-selector-wrapper align-items-center"
           >
-            <div>On demand</div>
-            <Toggle
-              class="mx-3"
-              :toggled-right="billAnnually"
-              @click="billAnnually = !billAnnually"
-            ></Toggle>
-            <div>Reserved (1 year)</div>
-            <div class="ml-2 save">Save 33%</div>
+            <div class="form-check">
+              <input type="radio" name="cloud" id="cloud-gcp" v-model="cloud" value="gcp">
+              <label for="cloud-gcp"><img :src="getIconPath('gcp-logo')" alt="">Google Cloud</label>
+            </div>
+            <div class="form-check">
+              <input type="radio" name="cloud" id="cloud-aws" checked v-model="cloud" value="aws">
+              <label for="cloud-aws"><img :src="getIconPath('aws-logo')" alt=""> Amazon Cloud</label>
+            </div>
           </div>
           <div
             v-show="selectedDropdownItem.name !== 'details'"
@@ -92,10 +92,21 @@
         <div class="right-column__content">
           <div v-if="selectedDropdownItem.name === 'details'">
             <div class="total">Your estimated payment will be</div>
+            <div class="billing-toggle-wrapper align-items-center d-flex">
+              <div>On demand</div>
+              <Toggle
+                class="mx-3"
+                :toggled-right="billAnnually"
+                @click="billAnnually = !billAnnually"
+              ></Toggle>
+              <div>Reserved (1 year)</div>
+              <div class="ml-2 save">Save 33%</div>
+            </div>
             <component
               :is="calc1.name"
               :workload="workload"
               :pricing="billAnnually ? 'reserved' : 'ondemand'"
+              :cloud="cloud"
               v-model="scyllaPrices"
             ></component>
           </div>
@@ -169,6 +180,7 @@ export default defineComponent({
       scyllaPrices: [],
       rivalPrices: [],
       billAnnually: true,
+      cloud: 'aws',
       sliders: [
         {
           title: 'reads',
@@ -389,16 +401,21 @@ export default defineComponent({
     .scylla-comparison {
       display: flex;
     }
-    .billing-toggle-wrapper {
+    .cloud-selector-wrapper {
       display: flex;
       font-family: Roboto;
       font-style: normal;
       font-weight: normal;
-      font-size: 16px;
-      .save {
-        font-size: 14px;
-        color: #36b37e;
+      font-size: 16px;      
+      img {
+        height: 32px;
         padding: 5px;
+      }
+      input[type="radio"] + label {
+        cursor: pointer;
+      }
+      input[type="radio"]:not(:checked) + label {
+        color: dimgrey;
       }
     }
   }
@@ -413,6 +430,18 @@ export default defineComponent({
       font-size: 16px;
       line-height: 24px;
       color: $primary;
+    }
+    .billing-toggle-wrapper {
+      display: flex;
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      .save {
+        font-size: 14px;
+        color: #36b37e;
+        padding: 5px;
+      }
     }
   }
 }
