@@ -75,6 +75,11 @@ npm run serve
 npm run build
 ```
 
+### Build library for embedding a Calculator widget
+```
+npm run build-lib
+```
+
 ### Lints and fixes files
 ```
 npm run lint
